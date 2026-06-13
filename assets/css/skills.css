@@ -1,0 +1,30 @@
+.skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .skill-cell {
+      background: var(--bg);
+      padding: 1.75rem 1.5rem;
+    }
+
+    .skill-cell h4 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .skill-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .skill-list li {
+      font-size: 0.9rem;
+    }

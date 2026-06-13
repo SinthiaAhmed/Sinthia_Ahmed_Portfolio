@@ -1,0 +1,10 @@
+:root {
+  --text: #111111;
+  --text-muted: #777777;
+  --border: #e8e5e0;
+  --bg: #fafaf8;
+  --card: #ffffff;
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+}

@@ -1,0 +1,25 @@
+section {
+  padding: 5rem 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.section-header h2 {
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  font-weight: 400;
+}
+
+.section-header span {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
