@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case Study — Mobile Wallet App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --text:       #111111;
+      --text-muted: #777777;
+      --border:     #e8e5e0;
+      --bg:         #fafaf8;
+      --card:       #ffffff;
+      --warm-1:     #e2ecf0;
+      --warm-2:     #eef4f7;
+      --accent:     #0099cc;
+      --accent-2:   #e8344a;
+      --accent-soft:#dff0f8;
+      --serif:      'Playfair Display', Georgia, serif;
+      --sans:       'DM Sans', sans-serif;
+      --col:        700px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .site {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── HERO ── */
+    .cs-hero {
+      padding: 6rem 0 4rem;
+      max-width: var(--col);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards 0.1s;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 2.5rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; font-size: 0.9rem; }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .cs-hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5vw, 3.4rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    .cs-hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .cs-hero .hero-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 540px;
+      line-height: 1.85;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── META ROW ── */
+    .meta-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      margin: 3.5rem 0 0;
+    }
+
+    .meta-cell {
+      padding: 1.25rem 1.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .meta-cell:last-child { border-right: none; }
+
+    .meta-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .meta-value {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* ── HERO IMAGE ── */
+    .hero-img-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 7;
+      background: var(--warm-1);
+      margin: 3.5rem 0 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease forwards 0.35s;
+    }
+
+    .hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+
+    /* ── SECTION STRUCTURE ── */
+    .cs-section { padding: 5rem 0; }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-header h2 {
+      font-family: var(--serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+    }
+
+    .section-header span {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+    }
+
+    .body-col { max-width: var(--col); }
+
+    .body-col p {
+      color: #444;
+      margin-bottom: 1.25rem;
+      font-size: 0.97rem;
+      line-height: 1.85;
+    }
+
+    .body-col p:last-child { margin-bottom: 0; }
+
+    h3 {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin: 2.5rem 0 0.75rem;
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      border-left: 2px solid var(--accent);
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+      background: var(--accent-soft);
+    }
+
+    .callout p {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    /* ── STAT ROW ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    .stat-cell {
+      padding: 1.75rem 1.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat-cell:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+      color: var(--accent);
+    }
+
+    .stat-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── TAGS ── */
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1.25rem 0 2rem;
+    }
+
+    .tag {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--accent);
+      border: 1px solid var(--accent-soft);
+      background: var(--accent-soft);
+      padding: 0.25rem 0.7rem;
+    }
+
+    /* ── IMAGE SLOTS ── */
+    .img-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 2.5rem 0 0.5rem;
+    }
+
+    .img-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5rem;
+      margin: 2.5rem 0 0.5rem;
+    }
+
+    .img-grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin: 2.5rem 0 0.5rem;
+    }
+
+    .img-slot {
+      width: 100%;
+      background: var(--warm-1);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 1rem 0.75rem;
+    }
+
+    .img-slot img {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    }
+
+    .img-caption {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.6rem;
+      font-style: italic;
+      text-align: center;
+    }
+
+    /* ── PROCESS TABLE ── */
+    .process-table {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.875rem;
+    }
+
+    .process-table tr { border-bottom: 1px solid var(--border); }
+    .process-table tr:last-child { border-bottom: none; }
+
+    .process-table td {
+      padding: 1.1rem 1.25rem;
+      vertical-align: top;
+    }
+
+    .process-table td:first-child {
+      width: 110px;
+      color: var(--accent);
+      font-weight: 500;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+      padding-top: 1.2rem;
+    }
+
+    .process-table td:last-child { color: #444; line-height: 1.7; }
+
+    /* ── OUTCOME BAND ── */
+    .outcome-band {
+      background: #0a1f2e;
+      color: #fff;
+      padding: 3rem;
+      margin: 2.5rem 0;
+    }
+
+    .outcome-band h3 {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: #fff;
+      margin: 0 0 0.5rem;
+    }
+
+    .outcome-band > p { color: rgba(255,255,255,0.6); font-size: 0.875rem; margin: 0 0 2rem; }
+
+    .outcome-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.14);
+      padding-top: 2rem;
+    }
+
+    .outcome-stat { padding-right: 2rem; }
+
+    .outcome-stat .stat-number { color: #7fd4f0; font-size: 1.7rem; font-family: var(--serif); margin-bottom: 0.4rem; }
+    .outcome-stat .stat-desc { color: rgba(255,255,255,0.5); font-size: 0.8rem; line-height: 1.5; }
+
+    /* ── NEXT PROJECT ── */
+    .next-project {
+      padding: 5rem 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .next-project .label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .next-project h2 {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 0.3rem;
+    }
+
+    .next-project p { font-size: 0.85rem; color: var(--text-muted); }
+
+    .next-arrow {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 1.1rem;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+      margin-left: 2rem;
+    }
+
+    .next-arrow:hover { border-color: var(--accent); background: var(--accent); color: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p { font-size: 0.8rem; color: var(--text-muted); }
+
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── FLOW STRIP ── */
+    .flow-strip {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin: 2.5rem 0;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .flow-step {
+      flex: 1;
+      padding: 1.5rem 1.25rem;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+
+    .flow-step:last-child { border-right: none; }
+
+    .flow-num {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      color: var(--accent);
+      opacity: 0.35;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .flow-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .flow-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .meta-row { grid-template-columns: 1fr 1fr; }
+      .meta-cell { border-bottom: 1px solid var(--border); }
+      .stat-row { grid-template-columns: 1fr; }
+      .stat-cell { border-right: none; border-bottom: 1px solid var(--border); }
+      .img-grid-2, .img-grid-3, .img-grid-5 { grid-template-columns: 1fr 1fr; }
+      .outcome-stats { grid-template-columns: 1fr; gap: 1.5rem; }
+      .next-project { flex-direction: column; align-items: flex-start; gap: 2rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .outcome-band { padding: 2rem 1.5rem; }
+      .flow-strip { flex-direction: column; }
+      .flow-step { border-right: none; border-bottom: 1px solid var(--border); }
+      .hero-img-wrap { gap: 0.75rem; padding: 1.5rem 1rem; }
+      .hero-img-wrap img { height: 220px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, .fade-in { transition: none !important; animation: none !important; opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="site">
+
+  <!-- ── HERO ── -->
+  <div class="cs-hero">
+    <a href="../../index.html#work" class="back-link">All projects</a>
+    <div class="hero-eyebrow">UX / UI Case Study</div>
+    <h1>Mobile Wallet — <em>designing trust</em> into every tap</h1>
+    <p class="hero-desc">A complete mobile banking and wallet application for iOS, covering onboarding through daily financial tasks — from sending money and paying bills to cashing out and managing a personal profile.</p>
+
+    <div class="meta-row">
+      <div class="meta-cell">
+        <div class="meta-label">Role</div>
+        <div class="meta-value">UI/UX Designer</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Platform</div>
+        <div class="meta-value">iOS · Mobile</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Tools</div>
+        <div class="meta-value">Figma · Prototype</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Timeline</div>
+        <div class="meta-value">4 weeks</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HERO IMAGE ── -->
+  <div class="hero-img-wrap">
+    <img src="image/hero.png" alt="Mobile wallet home dashboard" />
+  </div>
+
+  <!-- ── THE PROBLEM ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>The problem</h2>
+      <span>Context</span>
+    </div>
+
+    <div class="body-col fade-in">
+      <p>Mobile financial services in Bangladesh and similar markets face a sharp contradiction: the people who need them most — those without easy access to bank branches — are also the least forgiving of confusing interfaces. A single moment of doubt on a payment screen can cause a user to abandon the app entirely and revert to cash.</p>
+
+      <p>Existing wallet apps in the region suffered from cluttered home screens that buried the most common actions, onboarding flows that asked for sensitive identity information without building any prior trust, and transaction flows with no clear visual hierarchy to confirm a user was doing the right thing with their money. The brief was to design a wallet app that felt as reliable as a bank teller — clear, calm, and in control.</p>
+
+      <div class="callout">
+        <p>"How might we make every financial action feel so obvious and safe that a first-time smartphone user completes it without hesitation?"</p>
+      </div>
+
+      <div class="stat-row fade-in">
+        <div class="stat-cell">
+          <div class="stat-number">15</div>
+          <div class="stat-desc">screens covering the full user journey, end-to-end</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-number">6</div>
+          <div class="stat-desc">core transaction flows — send, cash out, recharge, add money, pay bills, transfer</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-number">2</div>
+          <div class="stat-desc">distinct entry paths — onboarding for new users, PIN login for returning users</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RESEARCH / PLANNING ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>Planning &amp; discovery</h2>
+      <span>What I learned</span>
+    </div>
+
+    <div class="body-col fade-in">
+      <p>Before any screens were drawn, the existing landscape of mobile money apps in South Asia was audited — bKash, Nagad, and regional competitors — paying attention to where users expressed confusion or distrust in public reviews, and which interaction patterns appeared consistently across successful apps. The audit surfaced three recurring failure modes: onboarding that front-loaded verification before the user understood what they were signing up for; home screens that showed every feature at equal weight; and transaction flows that ended ambiguously, with no clear confirmation state.</p>
+
+      <div class="tag-list">
+        <span class="tag">Competitive audit</span>
+        <span class="tag">User flow mapping</span>
+        <span class="tag">Information architecture</span>
+        <span class="tag">Progressive disclosure</span>
+        <span class="tag">Trust hierarchy</span>
+        <span class="tag">Figma prototyping</span>
+      </div>
+
+      <h3>Key findings</h3>
+      <p>Three structural problems drove the design decisions. First, onboarding demanded NID numbers and selfies before users had seen a single piece of value — a pattern that erodes trust before it can be built. Second, home screens treated sending ৳50 to a friend with the same visual prominence as navigating to Govt Services or Charity — a cognitive tax on every daily interaction. Third, money transfer flows lacked a strong confirmation gesture, leaving users unsure whether a tap had actually sent funds or just staged them.</p>
+    </div>
+  </section>
+
+  <!-- ── DESIGN PROCESS ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>Design process</h2>
+      <span>How I got there</span>
+    </div>
+
+    <div class="body-col fade-in">
+      <p>The design was structured around three phases — onboarding and trust, the home dashboard, and transactional flows — each moving through the same six-stage process before being considered complete.</p>
+
+      <table class="process-table">
+        <tr>
+          <td>Empathize</td>
+          <td>Audited regional mobile money apps and mapped the moments where new users lose confidence during first-time setup and first transactions.</td>
+        </tr>
+        <tr>
+          <td>Define</td>
+          <td>Established the trust hierarchy: value-first onboarding, then phone verification, then NID — so users see what they're signing up for before they commit sensitive data.</td>
+        </tr>
+        <tr>
+          <td>Ideate</td>
+          <td>Explored dashboard layouts ranging from card-only to icon grid, and tested slide-to-send as a transaction confirmation gesture in place of a standard button.</td>
+        </tr>
+        <tr>
+          <td>Wireframe</td>
+          <td>Built low-fidelity flows for each of the six transaction types, separating "what the user needs to input" from "what the system needs to confirm."</td>
+        </tr>
+        <tr>
+          <td>Prototype</td>
+          <td>Produced 15 high-fidelity screens in Figma with a two-color system — sky blue for navigation and brand, red-pink for primary actions — to visually separate browsing from committing.</td>
+        </tr>
+        <tr>
+          <td>Review</td>
+          <td>Validated each flow end-to-end: onboarding → dashboard → transaction → history, ensuring the account balance and transaction details remained consistent across all screens.</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ONBOARDING -->
+    <div class="body-col fade-in">
+      <h3>Onboarding — trust before verification</h3>
+      <p>Most wallet apps open with a form. This design opens with a benefit statement: a branded header, a simple phone number field, and a clear list of what the account offers — all before asking for anything personal. NID verification and selfie upload are deferred to a second onboarding step, and PIN creation comes last, once the user has already committed to creating an account. The sequence reverses the industry default: earn trust, then ask for credentials.</p>
+    </div>
+
+    <div class="img-grid-2 fade-in">
+      <div>
+        <div class="img-slot"><img src="image/user faceID.png" alt="Login screen with Face ID option" /></div>
+        <p class="img-caption">Returning users — PIN or Face ID login</p>
+      </div>
+      
+      <div>
+        <div class="img-slot"><img src="image/NID.png" alt="NID verification and selfie upload" /></div>
+        <p class="img-caption">Identity verification — deferred to step two</p>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="body-col fade-in">
+      <h3>Home dashboard — hierarchy over parity</h3>
+      <p>The home screen gives the account balance card the top position and the most visual weight, as this is the piece of information users open the app to check most frequently. The six primary actions — Send Money, Cash Out, Mobile Recharge, Add Money, Pay Bills, Fund Transfer — sit directly beneath it as a 3×2 icon grid, giving equal access to the most common tasks without promoting one over another. Secondary services (Govt Services, Deposit, Charity, Travel, Other) sit further down the page, visible when needed but out of the critical path. The floating QR button in the center of the navigation bar provides a one-tap shortcut to the most spontaneous action: scanning a code to pay or receive.</p>
+    </div>
+
+    <div class="img-grid-2 fade-in">
+      <div>
+        <div class="img-slot"><img src="image/dashboard.png" alt="Home dashboard with account balance and quick actions" /></div>
+        <p class="img-caption">Dashboard — balance card, primary actions, secondary services</p>
+      </div>
+      <div>
+        <div class="img-slot"><img src="image/desposit sheet.png" alt="Deposit bottom sheet with Remittance, Insurance, Loan, Microfinance" /></div>
+        <p class="img-caption">Deposit bottom sheet — secondary services revealed on demand</p>
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="body-col fade-in">
+      <h3>Transaction flows — input, review, confirm</h3>
+      <p>Every transaction flow follows the same three-stage pattern: input (who and how much), review (carrier or bank detected, ongoing offers shown), and confirm (a slide-to-send gesture that requires a deliberate physical action rather than an accidental tap). The slide gesture was chosen specifically because it is nearly impossible to trigger unintentionally, which directly addresses the most common source of user anxiety: sending money to the wrong person or the wrong amount.</p>
+
+      <p>Each transaction screen also surfaces the account balance prominently — so users always know how much they have before they commit to an amount — and shows recent contacts as avatar shortcuts to reduce the friction of typing a number each time.</p>
+    </div>
+
+    <div class="img-grid-3 fade-in">
+      <div>
+        <div class="img-slot"><img src="image/send money.png" alt="Send money screen with contact search and amount" /></div>
+        <p class="img-caption">Send Money — contact picker and amount input</p>
+      </div>
+      <div>
+        <div class="img-slot"><img src="image/mobile recharge.png" alt="Mobile recharge with carrier detection and ongoing offers" /></div>
+        <p class="img-caption">Mobile Recharge — carrier auto-detected, offers shown</p>
+      </div>
+      <div>
+        <div class="img-slot"><img src="image/fund transfer.png" alt="Fund transfer to bank account or credit card" /></div>
+        <p class="img-caption">Fund Transfer — bank account or card, same slide pattern</p>
+      </div>
+    </div>
+
+    <div class="img-grid-2 fade-in">
+      <div>
+        <div class="img-slot"><img src="image/add money.png" alt="Add money from linked bank account" /></div>
+        <p class="img-caption">Add Money — pull from a linked bank account</p>
+      </div>
+      <div>
+        <div class="img-slot"><img src="image/cash out.png" alt="Cash out via QR scan or ATM" /></div>
+        <p class="img-caption">Cash Out — scan a QR code or use an ATM</p>
+      </div>
+    </div>
+
+    <!-- PAY BILLS -->
+    <div class="body-col fade-in">
+      <h3>Pay Bills — categorical then organizational</h3>
+      <p>Bill payment organizes providers into two tiers: a top icon row for utility categories (Electricity, Gas, Water, Internet, TV, Telephone), and a scrollable list of specific organizations within the selected category. Tapping Electricity, for instance, reveals Palli Bidyut, Desco, Nesco, and others as named list items with logo thumbnails. This two-level structure scales cleanly to dozens of providers without cluttering the initial view.</p>
+    </div>
+
+    <div class="img-grid-2 fade-in">
+      <div>
+        <div class="img-slot"><img src="image/Paybill.png" alt="Pay Bills with utility category icons and provider list" /></div>
+        <p class="img-caption">Pay Bills — categories above, providers below</p>
+      </div>
+    </div>
+
+    <!-- PROFILE & HISTORY -->
+    <div class="body-col fade-in">
+      <h3>Profile &amp; history — personal and transactional, separated</h3>
+      <p>The profile screen cleanly divides what belongs to the person from what belongs to the account. The top half covers identity and relationship data — name, phone number, personal information, nominees, and beneficiaries. The bottom half covers operational settings — app settings, support, and terms of use. This separation means a user looking to add a beneficiary and a user looking to contact support never cross paths in the same section. The transaction history separates by date and labels each entry with the action type, destination, and amount at a glance, with a Summary tab available for anyone who needs a period rollup.</p>
+    </div>
+
+    <div class="img-grid-2 fade-in">
+      <div>
+        <div class="img-slot"><img src="image/profile.png" alt="Profile screen with personal info, nominee, and settings sections" /></div>
+        <p class="img-caption">Profile — personal data and account settings, clearly separated</p>
+      </div>
+      <div>
+        <div class="img-slot"><img src="image/transaction history.png" alt="Transaction history grouped by date" /></div>
+        <p class="img-caption">History — date-grouped, action-typed, amount-visible at a glance</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DESIGN DECISIONS ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>Key design decisions</h2>
+      <span>Rationale</span>
+    </div>
+
+    <div class="body-col fade-in">
+      <h3>A two-color action system</h3>
+      <p>Sky blue (#0099CC) was chosen as the brand and navigation color — present in the header, the logo area, the profile banner, and the balance card. Red-pink (#E8344A) was reserved exclusively for primary call-to-action buttons: Scan QR, Login, and the floating QR shortcut. This strict separation means users learn quickly that blue means "where you are" and red means "act now." It also prevents the common mistake of using the same color for both decorative and actionable elements, which reduces confidence in a financial context.</p>
+
+      <h3>Slide to send, not tap to send</h3>
+      <p>Replacing a standard confirm button with a slide gesture on every transaction screen introduces deliberate friction at the highest-stakes moment. The physical effort required to slide an arrow across a track is small in absolute terms, but it is enough to interrupt an accidental tap and give the user one more moment to verify the payee and amount. This is a standard pattern in high-stakes mobile interactions (rideshare, emergency calls) and it belongs in payments too.</p>
+
+      <h3>Balance visibility throughout</h3>
+      <p>The account balance appears at the top of every transaction screen, not just the home dashboard. This prevents the common mistake of entering an amount greater than the available balance without realizing it until an error appears — a frustration that erodes trust and increases support contacts.</p>
+    </div>
+
+    <div class="flow-strip fade-in">
+      <div class="flow-step">
+        <div class="flow-num">01</div>
+        <div class="flow-title">Login</div>
+        <div class="flow-desc">PIN entry or Face ID, balance immediately visible on success</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">02</div>
+        <div class="flow-title">Dashboard</div>
+        <div class="flow-desc">Six primary actions, balance card, QR shortcut</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">03</div>
+        <div class="flow-title">Select action</div>
+        <div class="flow-desc">Contact picker or category selector, amount field</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">04</div>
+        <div class="flow-title">Review</div>
+        <div class="flow-desc">Balance shown, recipient confirmed, offers surfaced</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">05</div>
+        <div class="flow-title">Slide to send</div>
+        <div class="flow-desc">Deliberate confirm gesture — no accidental taps</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── OUTCOME ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>Outcome &amp; impact</h2>
+      <span>Results</span>
+    </div>
+
+    <div class="body-col fade-in">
+      <p>The completed design delivers a coherent, end-to-end experience across 15 screens — from a first-time user reading about account benefits, all the way through to reviewing a month of transaction history. The two-color action system and the slide-to-send pattern are consistent across every transaction type, meaning that anyone who learns Send Money already understands Mobile Recharge and Fund Transfer. And the deferred onboarding model — value first, verification second — treats new users as potential customers rather than compliance risks from the first screen.</p>
+
+      <div class="outcome-band">
+        <h3>What the design delivers</h3>
+        <p>A complete, production-ready UI system for a mobile wallet application.</p>
+        <div class="outcome-stats">
+          <div class="outcome-stat">
+            <div class="stat-number">Unified</div>
+            <div class="stat-desc">two-color action system across all 15 screens — blue for brand, red for action</div>
+          </div>
+          <div class="outcome-stat">
+            <div class="stat-number">Structured</div>
+            <div class="stat-desc">onboarding in trust-first order: value → phone → NID → PIN</div>
+          </div>
+          <div class="outcome-stat">
+            <div class="stat-number">Consistent</div>
+            <div class="stat-desc">slide-to-send confirmation across every transaction type</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Reflections</h3>
+      <p>The next iteration of this design would introduce a transaction receipt screen after each successful send, giving users a shareable confirmation they can screenshot for records — a feature that came up repeatedly in user research on competing apps. The Map tab in the bottom navigation is a strong foundation for a nearby agent/ATM locator, which would complete the Cash Out flow for users who prefer human-assisted withdrawals over QR scanning. And the notification center, currently represented in the bottom bar, would benefit from a full design pass to separate promotional notifications from transactional alerts — a critical distinction in a financial app.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+      <p>&copy; 2026 Sinthia Ahmed &mdash; UX/UI Designer</p>
+          <div class="footer-links">
+          <a href="https://www.linkedin.com/in/sinthia-ahmed-254bb218a" target="_blank">LinkedIn</a>
+          <!-- <a href="https://dribbble.com/yourhandle" target="_blank">Dribbble</a> -->
+          <a href="assets/resume/Sinthia Ahmed_Resume2026.pdf" download>Resume</a>
+      </div>
+  </footer>
+
+</div><!-- /site -->
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

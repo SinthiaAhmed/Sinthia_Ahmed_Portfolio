@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Case Study — Chaldal App Redesign</title>
+  <title>Case Study — Canada Job Market Map</title>
+  <meta name="description" content="UX/UI case study by Sinthia Ahmed — Canada Job Market Map, an interactive choropleth that helps job seekers visualise hiring demand by province." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -18,8 +19,8 @@
       --card:       #ffffff;
       --warm-1:     #ede9e2;
       --warm-2:     #f4f1ec;
-      --accent:     #6E3FF3;
-      --accent-soft:#efe9ff;
+      --accent:     #1d5fa8;
+      --accent-soft:#e8f1fb;
       --serif:      'Playfair Display', Georgia, serif;
       --sans:       'DM Sans', sans-serif;
       --col:        700px;
@@ -182,23 +183,37 @@
       line-height: 1.4;
     }
 
-    /* ── HERO IMAGE ── */
-    .hero-img-wrap {
+    /* ── IMAGE SLOTS ── */
+    .img-full {
       width: 100%;
-      aspect-ratio: 16 / 7;
       background: var(--warm-1);
-      margin: 3.5rem 0 0;
+      margin: 2.5rem 0;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      transform: translateY(16px);
-      animation: fadeUp 0.8s ease forwards 0.35s;
     }
 
-    .hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .img-full img { width: 100%; height: auto; display: block; }
 
+    .img-slot {
+      width: 100%;
+      background: var(--warm-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .img-slot img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+    
     /* ── SECTION STRUCTURE ── */
     .cs-section { padding: 5rem 0; }
 
@@ -307,51 +322,32 @@
       padding: 0.25rem 0.7rem;
     }
 
-    /* ── IMAGE SLOTS ── */
-    .img-full {
-      width: 100%;
-      background: var(--warm-1);
-      margin: 2.5rem 0;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .img-full img { width: 100%; height: auto; display: block; }
-
-    .img-grid-2 {
+    /* ── TWO COLUMN GRID (users) ── */
+    .two-col-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin: 2.5rem 0 0.5rem;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin: 2rem 0;
     }
-
-    .img-grid-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 1rem;
-      margin: 2.5rem 0 0.5rem;
+    .two-col-cell {
+      background: var(--card);
+      padding: 1.5rem;
     }
-
-    .img-slot {
-  width: 100%;
-  max-width: 340px;
-  margin: 0 auto;
-}
-
-.img-slot img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;   /* or remove this line */
-}
-
-    .img-caption {
-      font-size: 0.75rem;
+    .two-col-cell h4 {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
       color: var(--text-muted);
-      margin-top: 0.6rem;
-      font-style: italic;
+      margin-bottom: 0.6rem;
+    }
+    .two-col-cell p {
+      font-size: 0.9rem;
+      color: #444;
+      margin: 0;
+      line-height: 1.7;
     }
 
     /* ── PROCESS TABLE ── */
@@ -385,9 +381,35 @@
 
     .process-table td:last-child { color: #444; line-height: 1.7; }
 
+    /* ── DECISION LIST ── */
+    .decisions {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+    .decision {
+      background: var(--card);
+      padding: 1.25rem 1.5rem;
+    }
+    .decision-q {
+      font-family: var(--serif);
+      font-size: 1.02rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .decision-a {
+      font-size: 0.9rem;
+      color: #444;
+      line-height: 1.75;
+    }
+    .decision-a em { color: var(--accent); font-style: italic; }
+
     /* ── OUTCOME BAND ── */
     .outcome-band {
-      background: #181130;
+      background: #0f2540;
       color: #fff;
       padding: 3rem;
       margin: 2.5rem 0;
@@ -405,7 +427,7 @@
 
     .outcome-stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 0;
       border-top: 1px solid rgba(255,255,255,0.14);
       padding-top: 2rem;
@@ -415,6 +437,29 @@
 
     .outcome-stat .stat-number { color: var(--accent-soft); font-size: 1.7rem; }
     .outcome-stat .stat-desc { color: rgba(255,255,255,0.5); }
+
+    /* ── LEARNINGS LIST ── */
+    .learnings-list {
+      list-style: none;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .learnings-list li {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      font-size: 0.95rem;
+      color: #444;
+      line-height: 1.7;
+    }
+    .learnings-list li::before {
+      content: '→';
+      color: var(--accent);
+      font-weight: 500;
+      flex-shrink: 0;
+    }
 
     /* ── NEXT PROJECT ── */
     .next-project {
@@ -500,8 +545,9 @@
       .meta-cell { border-bottom: 1px solid var(--border); }
       .stat-row { grid-template-columns: 1fr; }
       .stat-cell { border-right: none; border-bottom: 1px solid var(--border); }
-      .img-grid-2, .img-grid-3 { grid-template-columns: 1fr; }
-      .outcome-stats { grid-template-columns: 1fr; gap: 1.5rem; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .decision { padding: 1.25rem; }
+      .outcome-stats { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
       .next-project { flex-direction: column; align-items: flex-start; gap: 2rem; }
       footer { flex-direction: column; gap: 1rem; text-align: center; }
       .outcome-band { padding: 2rem 1.5rem; }
@@ -530,35 +576,40 @@
   <div class="cs-hero">
     <a href="../../index.html#work" class="back-link">All projects</a>
     <div class="hero-eyebrow">UX / UI Case Study</div>
-    <h1>Chaldal — <em>reimagining the app</em>, sprint by sprint</h1>
-    <p class="hero-desc">A full reimagining of Bangladesh's largest online grocer, from home and browse through to profile and product catalog, delivered in agile sprints across a four-person team.</p>
+    <h1>Canada Job Market Map — <em>seeing demand</em>, province by province</h1>
+    <p class="hero-desc">An interactive choropleth map that helps job seekers instantly see where hiring demand is strongest across Canada's provinces and territories, built solo from data model to D3 rendering.</p>
 
     <div class="meta-row">
       <div class="meta-cell">
         <div class="meta-label">Role</div>
-        <div class="meta-value">UI Designer, Researcher</div>
+        <div class="meta-value">UX Designer &amp; Developer</div>
       </div>
       <div class="meta-cell">
         <div class="meta-label">Timeline</div>
-        <div class="meta-value">Oct – Dec 2022</div>
+        <div class="meta-value">2025 – 2026</div>
       </div>
       <div class="meta-cell">
-        <div class="meta-label">Platform</div>
-        <div class="meta-value">iOS</div>
+        <div class="meta-label">Tools</div>
+        <div class="meta-value">D3.js · HTML · CSS · JS</div>
       </div>
       <div class="meta-cell">
-        <div class="meta-label">Team</div>
-        <div class="meta-value">4 members · Adobe XD</div>
+        <div class="meta-label">Type</div>
+        <div class="meta-value">University project</div>
       </div>
     </div>
   </div>
 
-  <!-- ── HERO IMAGE ── -->
-  <div class="hero-img-wrap">
-    <img src="image/hero.png" alt="Chaldal redesigned home screen" />
+  <!-- ── HERO ── -->
+  <div class="img-full">
+    <div>
+        <div class="img-slot">
+          <img src="image/jobviz.png" alt="Responsive design" />
+        </div>
+        <!-- <p class="img-caption"></p> -->
+      </div>
   </div>
 
-  <!-- ── THE PROBLEM ── -->
+  <!-- ── OVERVIEW / PROBLEM ── -->
   <section class="cs-section">
     <div class="section-header fade-in">
       <h2>The problem</h2>
@@ -566,49 +617,59 @@
     </div>
 
     <div class="body-col fade-in">
-      <p>Chaldal's profile page mixed personal details, addresses, and payment history into one undifferentiated list, with no hierarchy telling users what was an identity setting versus a transaction record. The home page gave equal visual weight to every entry point, so high-value actions like browsing categories or finding daily offers were buried under generic banners. And the primary action color across the app was a faint red — a hue users instinctively read as a warning, not an invitation to buy.</p>
+      <p>Finding a job in Canada can feel overwhelming — especially when you don't know which cities or provinces are actually hiring for your role. When someone searches "UX Designer jobs in Canada" on Indeed or LinkedIn, they get a long list of postings they can filter by city, but there's no instant, spatial answer to the question that actually matters to them.</p>
 
       <div class="callout">
-        <p>"How might we give every screen in the app one clear job, instead of asking users to figure it out themselves?"</p>
+        <p>"Where in Canada should I even be looking for this kind of job?"</p>
       </div>
+
+      <p>Job portals show postings, not patterns. Someone open to relocating, or working remotely and wanting to move to where their industry is concentrated, had no good tool for this — so I built one.</p>
 
       <div class="stat-row fade-in">
         <div class="stat-cell">
-          <div class="stat-number">3</div>
-          <div class="stat-desc">core areas redesigned — home, profile, catalog</div>
+          <div class="stat-number">8</div>
+          <div class="stat-desc">high-demand job roles covered</div>
         </div>
         <div class="stat-cell">
-          <div class="stat-number">6</div>
-          <div class="stat-desc">sprints, each closing with a working release</div>
+          <div class="stat-number">13</div>
+          <div class="stat-desc">provinces &amp; territories mapped</div>
         </div>
         <div class="stat-cell">
-          <div class="stat-number">1</div>
-          <div class="stat-desc">unified color system replacing the warning-red CTA</div>
+          <div class="stat-number">0</div>
+          <div class="stat-desc">external API dependencies at runtime</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── RESEARCH / PLANNING ── -->
+  <!-- ── WHO IT'S FOR ── -->
   <section class="cs-section">
     <div class="section-header fade-in">
-      <h2>Planning &amp; discovery</h2>
-      <span>What I learned</span>
+      <h2>Who is it for?</h2>
+      <span>Users</span>
     </div>
 
     <div class="body-col fade-in">
-      <p>Before any screens were drawn, I audited how other grocery and e-commerce apps in the region structure their profile and catalog pages, then hand-sketched the information architecture for both — splitting "Profile" into personal info, address, payment, history, and settings, and mapping catalog views from list to product detail to checkout.</p>
+      <p>Type in any job title, and the map fills with colour — darker provinces have more openings. Hover over any province and you get the estimated count and demand intensity. It's a simple idea, but one that didn't exist in an easy-to-use, free, at-a-glance format. Four user groups shaped the design.</p>
 
-      <div class="tag-list">
-        <span class="tag">Competitive audit</span>
-        <span class="tag">Information architecture</span>
-        <span class="tag">Sketching</span>
-        <span class="tag">Agile sprint planning</span>
-        <span class="tag">Stakeholder review</span>
+      <div class="two-col-grid fade-in">
+        <div class="two-col-cell">
+          <h4>New graduates</h4>
+          <p>Deciding where to move or which province to target their job search in.</p>
+        </div>
+        <div class="two-col-cell">
+          <h4>Career changers</h4>
+          <p>Exploring whether their new role is viable in their current city or region.</p>
+        </div>
+        <div class="two-col-cell">
+          <h4>International applicants</h4>
+          <p>Scoping out Canada before applying for a work permit or relocation visa.</p>
+        </div>
+        <div class="two-col-cell">
+          <h4>Remote workers</h4>
+          <p>Choosing which province to base themselves in, factoring in industry density.</p>
+        </div>
       </div>
-
-      <h3>Key findings</h3>
-      <p>Account information had no separation between what a user controls (name, address) and what the system records (orders, payments) — both lived in the same flat list. On home, the busiest entry points (Categories, Search) competed for attention with promotional banners that served the business more than the shopper. And the existing red CTA color was being read as an alert rather than a call to action — a small but consistent piece of feedback across the audit.</p>
     </div>
   </section>
 
@@ -620,86 +681,91 @@
     </div>
 
     <div class="body-col fade-in">
-      <p>The team worked in agile sprints, moving through the app area by area — home and navigation first, then profile, then catalog — but each area cycled through the same six stages before it shipped.</p>
+      <p>Working solo, the project moved through five stages, each one narrowing the scope until the map said exactly one thing clearly.</p>
 
       <table class="process-table">
         <tr>
-          <td>Empathize</td>
-          <td>Audited comparable grocery apps and walked through Chaldal's existing flows to find where users were getting stuck.</td>
-        </tr>
-        <tr>
           <td>Define</td>
-          <td>Split account information into "who I am" versus "what I've bought," and gave the home page five distinct sections instead of one long scroll.</td>
+          <td>One question, one answer. The whole interface had to be built around speed of insight.</td>
         </tr>
         <tr>
-          <td>Ideate</td>
-          <td>Sketched IA for profile and catalog, and explored a new accent color to replace the warning-red CTA.</td>
+          <td>Format</td>
+          <td>Chose a choropleth map over a table or bar chart — geographic context was the whole point.</td>
         </tr>
         <tr>
-          <td>Wireframe</td>
-          <td>Built low-fidelity flows in Adobe XD for each sprint's scope before moving to visual design.</td>
+          <td>Data</td>
+          <td>Modelled estimated 2025–2026 posting volumes per province for 8 high-demand roles.</td>
         </tr>
         <tr>
-          <td>Prototype</td>
-          <td>Produced clickable, high-fidelity screens for home, profile, and catalog, reviewed with the wider team each sprint.</td>
+          <td>Build</td>
+          <td>D3.js and GeoJSON with a Lambert conformal projection tuned for Canadian geography.</td>
         </tr>
         <tr>
-          <td>Release</td>
-          <td>Shipped sprint by sprint, with several settings features still rolling out at project close.</td>
+          <td>Refine</td>
+          <td>Layered stat cards, tooltips, chips, and insight text to add depth without clutter.</td>
         </tr>
       </table>
+
+      <div class="tag-list">
+        <span class="tag">Data modelling</span>
+        <span class="tag">D3.js</span>
+        <span class="tag">GeoJSON</span>
+        <span class="tag">Interaction design</span>
+        <span class="tag">Information design</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DESIGN DECISIONS ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>Design decisions</h2>
+      <span>Why things look the way they do</span>
     </div>
 
     <div class="body-col fade-in">
-      <h3>Home &amp; navigation</h3>
-      <p>The redesigned home page breaks into five purposeful zones: store switching at the top, a Stories strip for daily offers, large category tiles, a personalized "Your Picks" rail, and a bottom bar anchoring Home, Categories, and Search at the thumb. Category browsing keeps a persistent breadcrumb so shoppers always know where they are, and the cart screen puts quantity steppers right on the line item.</p>
+      <div class="decisions">
+        <div class="decision">
+          <div class="decision-q">Why a choropleth and not a bar chart?</div>
+          <div class="decision-a">Because geography is the insight. A bar chart would answer "which province has more jobs" — but a map answers "where do I need to be." The spatial relationship between provinces is meaningful, especially for relocation decisions.</div>
+        </div>
+        <div class="decision">
+          <div class="decision-q">Why blue as the colour ramp?</div>
+          <div class="decision-a">Blue is universally read as intensity in data visualisation — dark means more, light means less. It avoids political associations and works well in both light and dark mode, keeping the map readable without legend overload.</div>
+        </div>
+        <div class="decision">
+          <div class="decision-q">Why show quick-select chips?</div>
+          <div class="decision-a">Most users don't arrive knowing exactly what to type. The chips surface the 8 most-searched roles instantly, reducing friction and making the tool feel immediately usable without reading instructions.</div>
+        </div>
+        <div class="decision">
+          <div class="decision-q">Why include the insight text panel?</div>
+          <div class="decision-a"><em>Ontario: 4,800 openings</em> is less useful than knowing why Ontario leads. The insight panel gives context — Bay Street, Shopify, the Waterloo tech corridor — without cluttering the map itself.</div>
+        </div>
+        <div class="decision">
+          <div class="decision-q">Why split code into separate files?</div>
+          <div class="decision-a">Even a personal tool benefits from separation of concerns. map.js handles rendering, tooltip.js handles hover state, jobs.js holds data, and app.js wires everything together — making future updates a one-file change.</div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <div class="img-grid-2 fade-in">
-      <div>
-        <div class="img-slot"><img src="image/Category.png" alt="Category browsing screen with breadcrumb trail" /></div>
-        <p class="img-caption">Category drilldown — breadcrumb keeps users oriented</p>
-      </div>
-      <div>
-        <div class="img-slot"><img src="image/Cart.png" alt="Shopping bag screen with quantity controls" /></div>
-        <p class="img-caption">Shopping bag — inline quantity steppers and promo code</p>
-      </div>
-    </div>
-
-    <div class="body-col fade-in">
-      <h3>Profile &amp; account</h3>
-      <p>The profile redesign separates personal information, address, payment methods, and settings into distinct destinations, each with its own icon and label instead of being implied by position in a list. A set of vegetable-character avatars gives the account a sense of ownership ahead of real profile photo uploads.</p>
-    </div>
-
-    <div class="img-grid-3 fade-in">
-      <div>
-        <div class="img-slot"><img src="image/Profile.PNG" alt="Profile screen with personal information, address, payment, and settings" /></div>
-        <p class="img-caption">Profile overview</p>
-      </div>
-      <div>
-        <div class="img-slot"><img src="image/Avatar.PNG" alt="Select Avatar modal with vegetable and fruit characters" /></div>
-        <p class="img-caption">Select Avatar</p>
-      </div>
-      <div>
-        <div class="img-slot"><img src="image/LeftNav.PNG" alt="Side navigation drawer with loyalty, offers, and support" /></div>
-        <p class="img-caption">Navigation drawer</p>
-      </div>
+  <!-- ── TECHNICAL CHALLENGES ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>Technical challenges</h2>
+      <span>What was harder than expected</span>
     </div>
 
     <div class="body-col fade-in">
-      <h3>Product catalog</h3>
-      <p>Product details previously read as a dense paragraph dump. The redesign splits each listing into clear fields — price and unit, origin, manufacturer, and a truncated description with "See more" — so shoppers can scan for the one fact they came for, with a sticky order bar keeping the running total visible while they browse.</p>
-    </div>
+      <p>Getting an accurate Canada map rendered in D3 was the biggest hurdle. Canada's geography is notoriously tricky — the country spans 10 million km², with territories like Nunavut and Yukon taking up enormous area while holding very few jobs, and tiny provinces like PEI that are barely visible at a national scale.</p>
 
-    <div class="img-grid-2 fade-in">
-      <div>
-        <div class="img-slot"><img src="image/Product Screen.png" alt="Product browsing list with quantity stepper and review order bar" /></div>
-        <p class="img-caption">Browse list with sticky Review Order bar</p>
+      <p>Early attempts used rectangular bounding boxes per province, which looked cartoonishly wrong. The fix was fetching a real GeoJSON file with accurate provincial boundaries, then using d3.geoConicConformal with Canadian standard parallels at 49° and 77°N, rotated around 96°W — the same projection used by Statistics Canada.</p>
+
+      <div class="callout">
+        <p>"When visualising geographic data, the projection matters as much as the data itself. A bad projection makes correct data look wrong."</p>
       </div>
-      <div>
-        <div class="img-slot"><img src="image/Product Details.png" alt="Full product detail screen with frequently bought together section" /></div>
-        <p class="img-caption">Product detail with Frequently Bought Together</p>
-      </div>
+
+      <p>A secondary challenge was the sandbox environment restricting outbound API calls — the initial version tried to call an AI API for live data, which failed silently. The solution was moving data into a structured local module, which also made the tool faster and fully offline-capable.</p>
     </div>
   </section>
 
@@ -711,29 +777,42 @@
     </div>
 
     <div class="body-col fade-in">
-      <p>Splitting personal, address, payment, and settings data into distinct destinations removed the single biggest source of confusion in the old profile flow, while the new purple call-to-action color reads as an invitation to act rather than a warning to stop. On the catalog side, in-line quantity steppers and a persistent order bar mean fewer taps between finding an item and getting it into the bag.</p>
+      <p>The tool is fully downloadable as a self-contained project — no build step, no npm, no bundler. Open a local server and it runs. The code is cleanly separated into HTML, CSS, and four focused JS modules, making it easy to extend with new roles, new data, or a new country.</p>
 
       <div class="outcome-band">
-        <h3>What shipped by project close</h3>
-        <p>Released sprint by sprint across home, profile, and catalog.</p>
+        <h3>What the final product delivers</h3>
+        <p>A self-contained, offline-capable interactive map.</p>
         <div class="outcome-stats">
           <div class="outcome-stat">
-            <div class="stat-number">Unified</div>
-            <div class="stat-desc">CTA color across the app, replacing the warning-red</div>
+            <div class="stat-number">8</div>
+            <div class="stat-desc">high-demand job roles covered</div>
           </div>
           <div class="outcome-stat">
-            <div class="stat-number">Structured</div>
-            <div class="stat-desc">Profile split into five distinct, recognizable sections</div>
+            <div class="stat-number">13</div>
+            <div class="stat-desc">provinces &amp; territories mapped</div>
           </div>
           <div class="outcome-stat">
-            <div class="stat-number">Faster</div>
-            <div class="stat-desc">Cart and search flows with fewer taps to add an item</div>
+            <div class="stat-number">&lt;1s</div>
+            <div class="stat-desc">time to first insight after search</div>
+          </div>
+          <div class="outcome-stat">
+            <div class="stat-number">0</div>
+            <div class="stat-desc">external API dependencies at runtime</div>
           </div>
         </div>
       </div>
 
+      <h3>Key takeaways</h3>
+      <ul class="learnings-list">
+        <li>Geographic projections are a UX decision, not just a technical one — the right projection makes data immediately trustworthy.</li>
+        <li>Reducing friction at the entry point dramatically improves perceived usability, even before anyone reads the instructions.</li>
+        <li>Separation of concerns in code directly maps to separation of concerns in design — when one thing does one job, it's easier to change.</li>
+        <li>Data visualisation works best when it answers one specific question very well, rather than trying to answer every question adequately.</li>
+        <li>Dark mode isn't an afterthought — designing the colour system with CSS variables from the start made it a 10-minute addition instead of a full rework.</li>
+      </ul>
+
       <h3>Reflections</h3>
-      <p>Payment methods, account deletion, and notification settings were still mid-rollout at the end of this project — agile delivery meant some features shipped well after the core navigation work. Given more time, the next iteration would replace the vegetable avatars with real profile photo uploads, and extend the same field-by-field product detail pattern to pharmacy and cookup listings, which currently inherit the grocery layout by default.</p>
+      <p>The most valuable next step would be connecting to live job board APIs to replace estimated data with real-time posting counts, making the tool genuinely useful for active job seekers rather than illustrative. I'd also explore drilling down from province to city level — so a search for "UX Designer in Ontario" could show that Toronto accounts for roughly 85% of those roles, with a secondary cluster in Waterloo. A salary range slider is another natural addition.</p>
     </div>
   </section>
 

@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case Study — Grocelist AI Grocery Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --text:        #111111;
+      --text-muted:  #777777;
+      --border:      #e8e5e0;
+      --bg:          #fafaf8;
+      --card:        #ffffff;
+      --warm-1:      #e8ede4;
+      --warm-2:      #f2f5ef;
+      --accent:      #3B6D11;
+      --accent-soft: #EAF3DE;
+      --serif:       'Playfair Display', Georgia, serif;
+      --sans:        'DM Sans', sans-serif;
+      --col:         700px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .site {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--text);
+      font-family: var(--serif);
+      font-size: 1.05rem;
+    }
+
+    .logo .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; }
+    .logo:hover { opacity: 0.75; }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .cs-hero {
+      padding: 6rem 0 4rem;
+      max-width: var(--col);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards 0.1s;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 2.5rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; font-size: 0.9rem; }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .cs-hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5vw, 3.4rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    .cs-hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .cs-hero .hero-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 540px;
+      line-height: 1.85;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── META ROW ── */
+    .meta-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      margin: 3.5rem 0 0;
+    }
+
+    .meta-cell {
+      padding: 1.25rem 1.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .meta-cell:last-child { border-right: none; }
+
+    .meta-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .meta-value {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* ── HERO IMAGE ── */
+    .hero-img-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 7;
+      background: var(--warm-1);
+      margin: 3.5rem 0 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease forwards 0.35s;
+    }
+
+    /* Hero placeholder — replace with a screenshot when available */
+    .hero-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      background: linear-gradient(135deg, #d4e8c2 0%, #eaf3de 60%, #c8deb4 100%);
+    }
+
+    .hero-placeholder .ph-label {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .hero-placeholder .ph-sub {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #5a9a20;
+    }
+
+    .hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+    /* ── SECTION STRUCTURE ── */
+    .cs-section { padding: 5rem 0; }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-header h2 {
+      font-family: var(--serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+    }
+
+    .section-header span {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+    }
+
+    .body-col { max-width: var(--col); }
+
+    .body-col p {
+      color: #444;
+      margin-bottom: 1.25rem;
+      font-size: 0.97rem;
+      line-height: 1.85;
+    }
+
+    .body-col p:last-child { margin-bottom: 0; }
+
+    h3 {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin: 2.5rem 0 0.75rem;
+    }
+
+    /* ── CALLOUT ── */
+    .callout {
+      border-left: 2px solid var(--accent);
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+      background: var(--accent-soft);
+    }
+
+    .callout p {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    /* ── STAT ROW ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    .stat-cell {
+      padding: 1.75rem 1.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat-cell:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+      color: var(--accent);
+    }
+
+    .stat-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── TAGS ── */
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1.25rem 0 2rem;
+    }
+
+    .tag {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--accent);
+      border: 1px solid var(--accent-soft);
+      background: var(--accent-soft);
+      padding: 0.25rem 0.7rem;
+    }
+
+    /* ── IMAGE SLOTS ── */
+    .img-full {
+      width: 100%;
+      background: var(--warm-1);
+      margin: 2.5rem 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .img-full img { width: 100%; height: auto; display: block; }
+
+    .img-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 2.5rem 0 0.5rem;
+    }
+
+    .img-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin: 2.5rem 0 0.5rem;
+    }
+
+    .img-slot {
+      width: 100%;
+      background: var(--warm-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .img-slot img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* Placeholder for image slots without screenshots yet */
+    .img-slot-ph {
+      width: 100%;
+      min-height: 200px;
+      background: var(--warm-1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 2rem;
+    }
+
+    .img-slot-ph .ph-icon {
+      font-size: 2rem;
+      opacity: 0.4;
+    }
+
+    .img-slot-ph .ph-text {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .img-caption {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.6rem;
+      font-style: italic;
+    }
+
+    /* ── PROCESS TABLE ── */
+    .process-table {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.875rem;
+    }
+
+    .process-table tr { border-bottom: 1px solid var(--border); }
+    .process-table tr:last-child { border-bottom: none; }
+
+    .process-table td {
+      padding: 1.1rem 1.25rem;
+      vertical-align: top;
+    }
+
+    .process-table td:first-child {
+      width: 110px;
+      color: var(--accent);
+      font-weight: 500;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+      padding-top: 1.2rem;
+    }
+
+    .process-table td:last-child { color: #444; line-height: 1.7; }
+
+    /* ── DECISION TABLE ── */
+    .decision-table {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.8rem;
+    }
+
+    .decision-table th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      background: var(--warm-2);
+    }
+
+    .decision-table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: #444;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    .decision-table tr:last-child td { border-bottom: none; }
+    .decision-table .dt-name { font-weight: 500; color: var(--text); }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      padding: 0.2rem 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 500;
+    }
+
+    .badge-changed { background: #FEF3CD; color: #92650A; }
+    .badge-added   { background: var(--accent-soft); color: var(--accent); }
+    .badge-removed { background: #FEE2E2; color: #9B1C1C; }
+
+    /* ── OUTCOME BAND ── */
+    .outcome-band {
+      background: #0f1f06;
+      color: #fff;
+      padding: 3rem;
+      margin: 2.5rem 0;
+    }
+
+    .outcome-band h3 {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: #fff;
+      margin: 0 0 0.5rem;
+    }
+
+    .outcome-band p { color: rgba(255,255,255,0.6); font-size: 0.875rem; margin: 0 0 2rem; }
+
+    .outcome-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.14);
+      padding-top: 2rem;
+    }
+
+    .outcome-stat { padding-right: 2rem; }
+    .outcome-stat .stat-number { color: #97C459; font-size: 1.7rem; }
+    .outcome-stat .stat-desc   { color: rgba(255,255,255,0.5); }
+
+    /* ── NEXT PROJECT ── */
+    .next-project {
+      padding: 5rem 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .next-project .label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .next-project h2 {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 0.3rem;
+    }
+
+    .next-project p { font-size: 0.85rem; color: var(--text-muted); }
+
+    .next-arrow {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 1.1rem;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+      margin-left: 2rem;
+    }
+
+    .next-arrow:hover { border-color: var(--accent); background: var(--accent); color: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p { font-size: 0.8rem; color: var(--text-muted); }
+
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .meta-row { grid-template-columns: 1fr 1fr; }
+      .meta-cell { border-bottom: 1px solid var(--border); }
+      .stat-row { grid-template-columns: 1fr; }
+      .stat-cell { border-right: none; border-bottom: 1px solid var(--border); }
+      .img-grid-2, .img-grid-3 { grid-template-columns: 1fr; }
+      .outcome-stats { grid-template-columns: 1fr; gap: 1.5rem; }
+      .next-project { flex-direction: column; align-items: flex-start; gap: 2rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .outcome-band { padding: 2rem 1.5rem; }
+      .decision-table { font-size: 0.72rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, .fade-in { transition: none !important; animation: none !important; opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="site">
+
+  <!-- ── NAV ── 
+  <nav>
+    <a href="../../index.html#work" class="logo"><span class="dot"></span>Sinthia Ahmed</a>
+    <ul class="nav-links">
+      <li><a href="../../index.html#work">Work</a></li>
+      <li><a href="../../index.html#about">About</a></li>
+      <li><a href="../../index.html#skills">Skills</a></li>
+      <li><a href="../../index.html#contact">Contact</a></li>
+    </ul>
+  </nav>-->
+
+  <!-- ── HERO ── -->
+  <div class="cs-hero">
+    <a href="../../index.html#work" class="back-link">All projects</a>
+    <div class="hero-eyebrow">UX / UI Case Study</div>
+    <h1>Grocelist — <em>AI-powered grocery planning</em>, built from scratch</h1>
+    <p class="hero-desc">A personalized grocery list and meal planning web app that translates health goals and dietary restrictions into specific, actionable shopping lists — reducing decision fatigue through intelligent, real-time recommendations.</p>
+
+    <div class="meta-row">
+      <div class="meta-cell">
+        <div class="meta-label">Role</div>
+        <div class="meta-value">Product Designer &amp; Developer</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Timeline</div>
+        <div class="meta-value">3 Weeks</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Platform</div>
+        <div class="meta-value">Web — desktop-first</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Stack</div>
+        <div class="meta-value">HTML · CSS · Vanilla JS</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HERO IMAGE ── -->
+  <!-- Replace the placeholder below with: <img src="image/grocelist-hero.png" alt="Grocelist app — personalize and results screens" /> -->
+  <div class="hero-img-wrap">
+    <img src="image/hero.png" alt="Grocelist app — personalize and results screens" /> 
+  </div>
+
+  <!-- ── THE PROBLEM ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>The problem</h2>
+      <span>Context</span>
+    </div>
+
+    <div class="body-col fade-in">
+      <p>Most grocery planning tools treat shopping as a list-making exercise. The real challenge is upstream: people don't know <em>what</em> to buy because nothing connects their current health state to specific food choices. "I feel tired" doesn't automatically become "buy spinach, lentils, and oats" — and that translation gap is exactly where planning breaks down.</p>
+
+      <p>Existing apps offer generic recommendations ("eat more vegetables") with no rationale, ignore dietary restrictions as an afterthought, and leave recipe context entirely out of the flow. The result is decision fatigue at the shelf and a grocery list that doesn't feel personal.</p>
+
+      <div class="callout">
+        <p>"How might we build a system that understands someone's health in their own words, and turns that into a grocery list they actually trust?"</p>
+      </div>
+
+      <div class="stat-row fade-in">
+        <div class="stat-cell">
+          <div class="stat-number">2</div>
+          <div class="stat-desc">core pages — Personalize and Results — covering the full planning journey</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-number">6</div>
+          <div class="stat-desc">health intents mapped to distinct grocery lists and recipe sets</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-number">36+</div>
+          <div class="stat-desc">grocery items, each with a one-line nutritional rationale</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RESEARCH / PLANNING ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>Planning &amp; discovery</h2>
+      <span>What I learned</span>
+    </div>
+
+    <div class="body-col fade-in">
+      <p>Before any screens were drawn, I mapped how users actually think about food decisions — not in macronutrients or micronutrients, but in symptoms and feelings. "I've been tired all week," "my skin keeps breaking out," "I feel dehydrated after training" — these are the real inputs people bring to the problem. The product had to meet them there.</p>
+
+      <p>I also audited comparable nutrition and meal planning apps to find where they consistently fell short: dietary restriction handling was almost always buried in settings, recipe suggestions were decorative rather than actionable, and the connection between input and output was opaque — no explanation of why a recommendation was made.</p>
+
+      <div class="tag-list">
+        <span class="tag">Mental model mapping</span>
+        <span class="tag">Competitive audit</span>
+        <span class="tag">Intent keyword mapping</span>
+        <span class="tag">Hand-drawn wireframes</span>
+        <span class="tag">Iterative prototyping</span>
+      </div>
+
+      <h3>Key findings</h3>
+      <p>Users think in symptoms, not nutrients — so the input model had to use language like "low energy" and "better skin," not "increase iron intake." Trust depended on explanation: a list without reasons feels arbitrary. Dietary restrictions caused real anxiety when they weren't visibly applied and confirmed. And recipe context was the difference between a list someone acts on and one they ignore.</p>
+    </div>
+  </section>
+
+  <!-- ── DESIGN PROCESS ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>Design process</h2>
+      <span>How I got there</span>
+    </div>
+
+    <div class="body-col fade-in">
+      <p>The project moved through several distinct iterations, each driven by a specific piece of feedback or observed friction. The most significant shifts came from realizing that the layout needed to match the mental model of the task — not a dashboard, but a two-step journey from personalization to results.</p>
+
+      <table class="process-table">
+        <tr>
+          <td>Wireframe</td>
+          <td>Hand-sketched a two-panel home layout — dietary inputs and nutrient controls on the left, health description and CTA on the right — establishing the spatial structure before any code was written.</td>
+        </tr>
+        <tr>
+          <td>Layout</td>
+          <td>Removed an early left sidebar in favour of a minimal top nav with two tabs. Grocery planning is a sequential task, not a dashboard — sidebar navigation added visual weight without value.</td>
+        </tr>
+        <tr>
+          <td>Results page</td>
+          <td>Moved results out of a right panel into a dedicated full page. The three-column input+results layout felt overwhelming; giving the list its own page reduced cognitive load and made both experiences feel intentional.</td>
+        </tr>
+        <tr>
+          <td>Intelligence</td>
+          <td>Wired up real logic behind every input. Health chips and freetext map to six intents (energy, skin, hydration, workout, digestion, weight), which drive the grocery list, recipes, insight banner, and nutrition summary simultaneously.</td>
+        </tr>
+        <tr>
+          <td>Components</td>
+          <td>Replaced continuous sliders with segmented controls (Low / Balanced / High) for macros. Expanded recipe cards from a name-and-description to a full expandable view with ingredient lists and step-by-step method.</td>
+        </tr>
+        <tr>
+          <td>Delivery</td>
+          <td>Shipped as a single self-contained HTML file — no build step, no backend, deployable to any static host in under a minute.</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="body-col fade-in">
+      <h3>Personalize page</h3>
+      <p>The left panel handles everything the system needs to know before generating: dietary restrictions as selectable chips (Vegetarian, Vegan, Halal, Gluten-free, Dairy-free, Nut-free), macro preferences as segmented Low / Balanced / High controls, and micronutrient focus chips (Iron, Vitamin D, Calcium, Magnesium, Fibre, Potassium, Zinc, Vitamin C). The right panel takes the health context — quick-select chips for common states plus a free-text box for anything else — and houses the generate CTA.</p>
+    </div>
+
+    <!-- Replace placeholders with: <img src="image/grocelist-personalize.png" alt="..." /> -->
+    <div class="img-grid-2 fade-in">
+      <div>
+        <div class="img-slot">
+          <img src="image/leftPanel.png" alt="Left panel" />
+        </div>
+        <p class="img-caption">Left panel — dietary restrictions, macro controls, and focus nutrients</p>
+      </div>
+      <div>
+        <div class="img-slot">
+          <img src="image/rightPanel.png" alt="right panel" />
+        </div>
+        <p class="img-caption">Right panel — health chips, freetext input, and generate CTA</p>
+      </div>
+    </div>
+
+    <div class="body-col fade-in">
+      <h3>Results page</h3>
+      <p>The results page opens with a smart insight banner that summarizes what the system detected and what it added in response — making the AI reasoning visible and building trust. Below it, a two-column layout puts the grocery list (categorized by Produce, Protein, Pantry, Drinks, Snacks, with checkboxes and nutritional rationale on each item) alongside the recipe panel (three expandable recipe cards with full ingredients and method). A nutrition summary card at the bottom reflects the user's macro selections with live values.</p>
+    </div>
+
+    <!-- Replace placeholders with actual screenshots -->
+    <div class="img-grid-2 fade-in">
+      <div>
+        <div class="img-slot">
+          <img src="image/grocerylist.png" alt="Grocery list" />
+        </div>
+        <p class="img-caption">Grocery list — categorized with checkboxes and per-item rationale</p>
+      </div>
+      <div>
+        <div class="img-slot">
+          <img src="image/recipelist.png" alt="recipe suggestion" />
+        </div>
+        <p class="img-caption">Recipe cards — expandable with full ingredients and step-by-step method</p>
+      </div>
+    </div>
+
+    <div class="body-col fade-in">
+      <h3>Design decisions</h3>
+      <p>The table below captures the most significant choices made across the project — what changed, what was added, and what was removed, and why each decision was made.</p>
+    </div>
+
+    <div class="body-col fade-in">
+      <table class="decision-table">
+        <thead>
+          <tr>
+            <th>Element</th>
+            <th>Before</th>
+            <th>After</th>
+            <th>Reason</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="dt-name">Navigation</td>
+            <td>Left sidebar with Home + Profile</td>
+            <td>Top nav, two tabs only</td>
+            <td>Sidebar added visual weight without value for a two-state app</td>
+            <td><span class="badge badge-changed">Changed</span></td>
+          </tr>
+          <tr>
+            <td class="dt-name">Results placement</td>
+            <td>Right panel alongside inputs</td>
+            <td>Separate full page</td>
+            <td>Three-column layout felt overwhelming; results deserve full focus</td>
+            <td><span class="badge badge-changed">Changed</span></td>
+          </tr>
+          <tr>
+            <td class="dt-name">Macro inputs</td>
+            <td>Continuous sliders (0–100g)</td>
+            <td>Segmented control (Low / Balanced / High)</td>
+            <td>Sliders required too much precision; segments are faster and clearer</td>
+            <td><span class="badge badge-changed">Changed</span></td>
+          </tr>
+          <tr>
+            <td class="dt-name">Recipe display</td>
+            <td>Name + one-line description only</td>
+            <td>Expandable with ingredients + steps</td>
+            <td>Users need the full recipe to act on the recommendation</td>
+            <td><span class="badge badge-changed">Changed</span></td>
+          </tr>
+          <tr>
+            <td class="dt-name">Item explanations</td>
+            <td>Not present</td>
+            <td>One-line rationale on every item</td>
+            <td>Without reasons, the list feels arbitrary; explanations build trust</td>
+            <td><span class="badge badge-added">Added</span></td>
+          </tr>
+          <tr>
+            <td class="dt-name">Insight banner</td>
+            <td>Not present</td>
+            <td>Top of results, summarizes AI logic</td>
+            <td>Makes the system feel transparent rather than like a random list</td>
+            <td><span class="badge badge-added">Added</span></td>
+          </tr>
+          <tr>
+            <td class="dt-name">Component states panel</td>
+            <td>Shown on Personalize page</td>
+            <td>Removed entirely</td>
+            <td>Was a design artifact, not a user experience</td>
+            <td><span class="badge badge-removed">Removed</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Wireframe sketch slot -->
+    <div class="img-full">
+      <div>
+        <div class="img-slot">
+          <img src="image/responsive.png" alt="Responsive design" />
+        </div>
+        <p class="img-caption">Keeping responsive design approach in mind</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── OUTCOME ── -->
+  <section class="cs-section">
+    <div class="section-header fade-in">
+      <h2>Outcome &amp; impact</h2>
+      <span>Results</span>
+    </div>
+
+    <div class="body-col fade-in">
+      <p>The final product is a fully reactive, self-contained web app where every input — dietary chips, macro controls, focus nutrients, health chips, and freetext — updates the grocery list, recipes, insight banner, and nutrition summary simultaneously on generate. Items incompatible with dietary restrictions are automatically excluded. Each recipe includes a full ingredient list and step-by-step method, bridging the gap between list and kitchen.</p>
+
+      <p>The system makes its reasoning visible at every step: the insight banner explains what it detected and why it added specific items; every grocery item carries a one-line nutritional rationale; the nutrition summary reflects the user's exact macro selections with live values. Nothing is opaque.</p>
+
+      <div class="outcome-band">
+        <h3>What shipped</h3>
+        <p>A single deployable HTML file — no backend, no build step, live on any static host.</p>
+        <div class="outcome-stats">
+          <div class="outcome-stat">
+            <div class="stat-number">Reactive</div>
+            <div class="stat-desc">Every selection updates the list, recipes, insight, and nutrition in real time</div>
+          </div>
+          <div class="outcome-stat">
+            <div class="stat-number">Safe</div>
+            <div class="stat-desc">Dietary restrictions automatically filter incompatible items from every list</div>
+          </div>
+          <div class="outcome-stat">
+            <div class="stat-number">Complete</div>
+            <div class="stat-desc">Full recipe guidance — ingredients and method — for all 18 recipes across 6 intents</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Reflections</h3>
+      <p>The biggest lesson was that decorative interactivity is worse than no interactivity at all. Early builds had chips and controls that looked like they did something but didn't — users assumed the product was broken. Wiring up real logic behind every input changed the feel of the product entirely.</p>
+
+      <p>The separation of input and results into distinct pages was also a turning point. The instinct was to show everything at once, dashboard-style. But grocery planning is a sequential task — you plan, then you shop. Matching the layout to that mental model made both screens feel cleaner and more purposeful.</p>
+
+      <p>If this were a real product, the next steps would be replacing keyword logic with a language model API, connecting to a supermarket API (Instacart, Tesco) to close the gap between list and cart, and rebuilding the interface as a mobile-native app — since grocery shopping happens on the phone, in the aisle.</p>
+    </div>
+  </section>
+
+  <!-- ── NEXT PROJECT ── -->
+  <div class="next-project fade-in">
+    <div>
+      <div class="label">Next project</div>
+      <h2>Canada Job Market Visualization</h2>
+      <p>A choropleth map that turns Canadian job posting data into instant geographic insight.</p>
+    </div>
+    <a href="../jobViz/canada-job-map-case-study.html" class="next-arrow">→</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+      <p>&copy; 2026 Sinthia Ahmed &mdash; UX/UI Designer</p>
+          <div class="footer-links">
+          <a href="https://www.linkedin.com/in/sinthia-ahmed-254bb218a" target="_blank">LinkedIn</a>
+          <!-- <a href="https://dribbble.com/yourhandle" target="_blank">Dribbble</a> -->
+          <a href="assets/resume/Sinthia Ahmed_Resume2026.pdf" download>Resume</a>
+      </div>
+  </footer>
+
+</div><!-- /site -->
+
+<script>
+  /* ── Scroll-triggered fade-in ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  /* ── Smooth scroll for anchor links ── */
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
